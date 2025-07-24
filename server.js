@@ -11,6 +11,19 @@ const app = express();
 
 // Middlewares
 
+const allowedOrigins = [
+  'https://gcek-cyber-buddy-frontend.vercel.app',
+  'http://localhost:3000' // optional, for local dev
+];
+
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true
+}));
+
+app.options('*', cors()); // preflight support
+
+
 app.use(express.json({ limit: '10mb' }));
 
 // Routes
