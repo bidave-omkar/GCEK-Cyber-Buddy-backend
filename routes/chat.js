@@ -23,13 +23,17 @@ router.post('/', authMiddleware, async (req, res) => {
       combinedInput += `\n\n[Image uploaded: ${fileData.name || 'image'}]`;
     }
 
-   let reply = await callGemini(combinedInput);
+    const maskIdentity = (text) => {
+      return text
+        .replace(/I am [^.]*\./gi, "I'm GCEK Cyber Buddy, your personal cybersecurity assistant. I'm here to guide, protect, and support you in understanding digital threats, safe browsing, and online safety. Let's secure your digital world together!")
+        .replace(/I am a large language model[^.]*\./gi, "I'm GCEK Cyber Buddy, your personal cybersecurity assistant. I'm here to guide, protect, and support you in understanding digital threats, safe browsing, and online safety. Let's secure your digital world together!")
+        .replace(/I am an? AI[^.]*\./gi, "I'm GCEK Cyber Buddy, your personal cybersecurity assistant. I'm here to guide, protect, and support you in understanding digital threats, safe browsing, and online safety. Let's secure your digital world together!")
+        .replace(/\bGemini\b/gi, "GCEK Cyber Buddy")
+        .replace(/\bGoogle\b/gi, "GCEK");
+    };
 
-// Replace Gemini's self-identity
-reply = reply
-  .replace(/I am a large language model(.*?)Google\./gi, "I am GCEK Cyber Buddy, your virtual assistant.")
-  .replace(/Gemini/g, "GCEK Cyber Buddy")
-  .replace(/Google/g, "GCEK"); // Optional – to completely mask Google
+    let reply = await callGemini(combinedInput);
+    reply = maskIdentity(reply);
 
 
     let chat = null;
@@ -127,7 +131,7 @@ router.put('/editMessage', authMiddleware, async (req, res) => {
 
     const updatedUserMsg = { sender: 'user', text: newText, timestamp: new Date() };
     let aiText = await callGemini(newText);
-    aiText = aiText.replace(/Gemini/g, "GCEK Cyber Buddy");
+    aiText = maskIdentity(aiText);
     const updatedAiMsg = { sender: 'ai', text: aiText, source: 'Gemini', timestamp: new Date() };
 
     session.messages.splice(userIndex, 0, updatedUserMsg, updatedAiMsg);
