@@ -25,10 +25,11 @@ router.post('/', authMiddleware, async (req, res) => {
 
     const maskIdentity = (text) => {
       return text
-        .replace(/I am [^.]*\./gi, "I'm GCEK Cyber Buddy, your personal cybersecurity assistant. I'm here to guide, protect, and support you in understanding digital threats, safe browsing, and online safety. Let's secure your digital world together!")
-        .replace(/I am a large language model[^.]*\./gi, "I'm GCEK Cyber Buddy, your personal cybersecurity assistant. I'm here to guide, protect, and support you in understanding digital threats, safe browsing, and online safety. Let's secure your digital world together!")
-        .replace(/I am an? AI[^.]*\./gi, "I'm GCEK Cyber Buddy, your personal cybersecurity assistant. I'm here to guide, protect, and support you in understanding digital threats, safe browsing, and online safety. Let's secure your digital world together!")
+        .replace(/I am [^.]*\./gi, "I'm GCEK Cyber Buddy, your virtual cyber security assistant. I'm here to guide, protect, and support you in understanding digital threats, safe browsing, and online safety. Let's secure your digital world together!")
+        .replace(/I am a large language model[^.]*\./gi, "I'm GCEK Cyber Buddy, your virtual cyber security assistant. I'm here to guide, protect, and support you in understanding digital threats, safe browsing, and online safety. Let's secure your digital world together!")
+        .replace(/I am an? AI[^.]*\./gi, "I'm GCEK Cyber Buddy, your virtual cyber security assistant. I'm here to guide, protect, and support you in understanding digital threats, safe browsing, and online safety. Let's secure your digital world together!")
         .replace(/\bGemini\b/gi, "GCEK Cyber Buddy")
+        .replace(/\bgemini\b/gi, "GCEK Cyber Buddy")
         .replace(/\bGoogle\b/gi, "GCEK");
     };
 
@@ -56,14 +57,14 @@ router.post('/', authMiddleware, async (req, res) => {
         title: message.substring(0, 30) + (message.length > 30 ? '...' : ''),
         messages: [
           { sender: 'user', text: message.trim(), timestamp: new Date(), file: fileData || undefined },
-          { sender: 'ai', text: reply, source: 'Gemini', timestamp: new Date() }
+          { sender: 'ai', text: reply, source: 'GCEK Cyber Buddy', timestamp: new Date() }
         ]
       });
       await chat.save();
       newSessionId = chat._id;
     }
 
-    res.json({ success: true, response: reply, source: 'Gemini', sessionId: newSessionId });
+    res.json({ success: true, response: reply, source: 'GCEK Cyber Buddy', sessionId: newSessionId });
   } catch (err) {
     console.error('Chat error:', err);
     res.status(500).json({ success: false, message: 'Failed to process message', error: err.message });
@@ -132,7 +133,7 @@ router.put('/editMessage', authMiddleware, async (req, res) => {
     const updatedUserMsg = { sender: 'user', text: newText, timestamp: new Date() };
     let aiText = await callGemini(newText);
     aiText = maskIdentity(aiText);
-    const updatedAiMsg = { sender: 'ai', text: aiText, source: 'Gemini', timestamp: new Date() };
+    const updatedAiMsg = { sender: 'ai', text: aiText, source: 'GCEK Cyber Buddy', timestamp: new Date() };
 
     session.messages.splice(userIndex, 0, updatedUserMsg, updatedAiMsg);
     session.updatedAt = new Date();
