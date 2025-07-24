@@ -23,7 +23,10 @@ router.post('/', authMiddleware, async (req, res) => {
       combinedInput += `\n\n[Image uploaded: ${fileData.name || 'image'}]`;
     }
 
-    const reply = await callGemini(combinedInput);
+    let reply = await callGemini(combinedInput);
+
+    // Replace any model name or unwanted label with your custom name
+    reply = reply.replace(/Gemini/g, "GCEK Cyber Buddy");
 
     let chat = null;
     let newSessionId = sessionId;
@@ -63,14 +66,14 @@ router.post('/', authMiddleware, async (req, res) => {
 router.post('/virustotal-scan', authMiddleware, async (req, res) => {
   try {
     const { url } = req.body;
-    
+
     if (!url) {
       return res.status(400).json({ error: 'URL parameter is required' });
     }
 
     const result = await callVirusTotal(url);
     res.json(result);
-    
+
   } catch (error) {
     console.error('VirusTotal scan failed:', error);
     res.status(500).json({ error: error.message });
@@ -119,7 +122,8 @@ router.put('/editMessage', authMiddleware, async (req, res) => {
     session.messages.splice(userIndex, 2);
 
     const updatedUserMsg = { sender: 'user', text: newText, timestamp: new Date() };
-    const aiText = await callGemini(newText);
+    let aiText = await callGemini(newText);
+    aiText = aiText.replace(/Gemini/g, "GCEK Cyber Buddy");
     const updatedAiMsg = { sender: 'ai', text: aiText, source: 'Gemini', timestamp: new Date() };
 
     session.messages.splice(userIndex, 0, updatedUserMsg, updatedAiMsg);
