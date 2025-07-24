@@ -38,7 +38,7 @@ router.post('/', authMiddleware, async (req, res) => {
     if (chat) {
       chat.messages.push(
         { sender: 'user', text: message.trim(), timestamp: new Date(), file: fileData || undefined },
-        { sender: 'ai', text: reply, source: 'Gemini', timestamp: new Date() }
+        { sender: 'ai', text: reply, source: 'GCEK Cyber buddy', timestamp: new Date() }
       );
       chat.updatedAt = new Date();
       await chat.save();
