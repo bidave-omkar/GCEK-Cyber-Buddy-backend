@@ -23,10 +23,14 @@ router.post('/', authMiddleware, async (req, res) => {
       combinedInput += `\n\n[Image uploaded: ${fileData.name || 'image'}]`;
     }
 
-    let reply = await callGemini(combinedInput);
+   let reply = await callGemini(combinedInput);
 
-    // Replace any model name or unwanted label with your custom name
-    reply = reply.replace(/Gemini/g, "GCEK Cyber Buddy");
+// Replace Gemini's self-identity
+reply = reply
+  .replace(/I am a large language model(.*?)Google\./gi, "I am GCEK Cyber Buddy, your virtual assistant.")
+  .replace(/Gemini/g, "GCEK Cyber Buddy")
+  .replace(/Google/g, "GCEK"); // Optional – to completely mask Google
+
 
     let chat = null;
     let newSessionId = sessionId;
