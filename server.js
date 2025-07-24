@@ -8,19 +8,9 @@ const chatRoutes = require('./routes/chat');
 
 const app = express();
 
-const allowedOrigins = [process.env.FRONTEND_URL];
 
 // Middlewares
-app.use(cors({
-  origin: function (origin, callback) {
-    if (allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true // if using cookies or authorization headers
-}));
+
 app.use(express.json({ limit: '10mb' }));
 
 // Routes
