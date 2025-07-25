@@ -23,7 +23,24 @@ router.post('/', authMiddleware, async (req, res) => {
       combinedInput += `\n\n[Image uploaded: ${fileData.name || 'image'}]`;
     }
 
+    const isCyberSecurityQuery = (text) => {
+      const keywords = [
+        "cyber security", "malware", "phishing", "ransomware", "safe browsing", "online safety",
+        "cyber attack", "firewall", "vpn", "encryption", "cyber threat", "data breach", "hacking",
+        "secure password", "virus", "ddos", "2fa", "authentication", "cybercrime", "cyberbullying"
+      ];
+
+      // Check if any keyword exists in the input text
+      return keywords.some(keyword => text.toLowerCase().includes(keyword));
+    };
+
     const maskIdentity = (text) => {
+      // Cybersecurity query check
+      if (!isCyberSecurityQuery(text)) {
+        return "I'm only able to answer questions that are related to cyber security.";
+      }
+
+      // Identity masking
       return text
         .replace(/I am [^.]*\./gi, "I'm GCEK Cyber Buddy, your virtual cyber security assistant. I'm here to guide, protect, and support you in understanding digital threats, safe browsing, and online safety. Let's secure your digital world together!")
         .replace(/I am a large language model[^.]*\./gi, "I'm GCEK Cyber Buddy, your virtual cyber security assistant. I'm here to guide, protect, and support you in understanding digital threats, safe browsing, and online safety. Let's secure your digital world together!")
