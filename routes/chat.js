@@ -23,60 +23,60 @@ router.post('/', authMiddleware, async (req, res) => {
       combinedInput += `\n\n[Image uploaded: ${fileData.name || 'image'}]`;
     }
 
-    const isCyberSecurityQuery = (text) => {
-      const keywords = [
-        "cyber security", "malware", "phishing", "ransomware", "safe browsing", "online safety",
-        "cyber attack", "firewall", "vpn", "encryption", "cyber threat", "data breach", "hacking",
-        "secure password", "virus", "ddos", "2fa", "authentication", "cybercrime", "cyberbullying"
-      ];
+    // const isCyberSecurityQuery = (text) => {
+    //   const keywords = [
+    //     "cyber security", "malware", "phishing", "ransomware", "safe browsing", "online safety",
+    //     "cyber attack", "firewall", "vpn", "encryption", "cyber threat", "data breach", "hacking",
+    //     "secure password", "virus", "ddos", "2fa", "authentication", "cybercrime", "cyberbullying"
+    //   ];
 
-      const greetings = ["hi", "hello", "hey", "good morning", "good evening", "greetings"];
-      const identityQueries = [
-        "who are you", "your name", "what's your name", "tell me your name", "who is this", "what are you"
-      ];
+    //   const greetings = ["hi", "hello", "hey", "good morning", "good evening", "greetings"];
+    //   const identityQueries = [
+    //     "who are you", "your name", "what's your name", "tell me your name", "who is this", "what are you"
+    //   ];
 
-      const lowerText = text.toLowerCase();
+    //   const lowerText = text.toLowerCase();
 
-      return (
-        keywords.some(keyword => lowerText.includes(keyword)) ||
-        greetings.some(greet => lowerText.includes(greet)) ||
-        identityQueries.some(q => lowerText.includes(q))
-      );
-    };
+    //   return (
+    //     keywords.some(keyword => lowerText.includes(keyword)) ||
+    //     greetings.some(greet => lowerText.includes(greet)) ||
+    //     identityQueries.some(q => lowerText.includes(q))
+    //   );
+    // };
 
-    const cyberBuddyIntro = "I'm GCEK Cyber Buddy, your virtual cyber security assistant. I'm here to guide, protect, and support you in understanding digital threats, safe browsing, and online safety. Let's secure your digital world together!";
+    // const cyberBuddyIntro = "I'm GCEK Cyber Buddy, your virtual cyber security assistant. I'm here to guide, protect, and support you in understanding digital threats, safe browsing, and online safety. Let's secure your digital world together!";
 
-    const maskIdentity = (text, userQuery) => {
-      const lowerQuery = userQuery.toLowerCase();
+    // const maskIdentity = (text, userQuery) => {
+    //   const lowerQuery = userQuery.toLowerCase();
 
-      // Respond to greeting
-      const greetings = ["hi", "hello", "hey", "good morning", "good evening", "greetings"];
-      if (greetings.some(g => lowerQuery.includes(g))) {
-        return `Hello! ${cyberBuddyIntro}`;
-      }
+    //   // Respond to greeting
+    //   const greetings = ["hi", "hello", "hey", "good morning", "good evening", "greetings"];
+    //   if (greetings.some(g => lowerQuery.includes(g))) {
+    //     return `Hello! ${cyberBuddyIntro}`;
+    //   }
 
-      // Respond to name/identity questions
-      const nameQueries = ["who are you", "your name", "what's your name", "tell me your name", "who is this", "what are you"];
-      if (nameQueries.some(q => lowerQuery.includes(q))) {
-        return cyberBuddyIntro;
-      }
+    //   // Respond to name/identity questions
+    //   const nameQueries = ["who are you", "your name", "what's your name", "tell me your name", "who is this", "what are you"];
+    //   if (nameQueries.some(q => lowerQuery.includes(q))) {
+    //     return cyberBuddyIntro;
+    //   }
 
-      // Filter out non-cybersecurity content
-      if (!isCyberSecurityQuery(userQuery)) {
-        return "I'm only able to answer questions that are related to cyber security.";
-      }
+    //   // Filter out non-cybersecurity content
+    //   if (!isCyberSecurityQuery(userQuery)) {
+    //     return "I'm only able to answer questions that are related to cyber security.";
+    //   }
 
-      // Replace AI identity with Cyber Buddy branding
-      return text
-        .replace(/I am [^.]*\./gi, cyberBuddyIntro)
-        .replace(/I am a large language model[^.]*\./gi, cyberBuddyIntro)
-        .replace(/I am an? AI[^.]*\./gi, cyberBuddyIntro)
-        .replace(/\b(gemini|google)\b/gi, "GCEK Cyber Buddy");
-    };
+    //   // Replace AI identity with Cyber Buddy branding
+    //   return text
+    //     .replace(/I am [^.]*\./gi, cyberBuddyIntro)
+    //     .replace(/I am a large language model[^.]*\./gi, cyberBuddyIntro)
+    //     .replace(/I am an? AI[^.]*\./gi, cyberBuddyIntro)
+    //     .replace(/\b(gemini|google)\b/gi, "GCEK Cyber Buddy");
+    // };
 
 
     let reply = await callGemini(combinedInput);
-    reply = maskIdentity(reply);
+    // reply = maskIdentity(reply);
 
 
     let chat = null;
